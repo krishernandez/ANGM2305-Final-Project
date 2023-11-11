@@ -1,9 +1,9 @@
-# A Simple Racing Game
+# A Simple Racing Game 🏎️
 
 ## Repository
 https://github.com/krishernandez/ANGM2305-Final-Project.git
 
-## Description
+## Description 
 A Simple Racing Game is an engaging racing game designed to provide a thrilling gaming experience. As the player, you will control a car, navigating through tracks while competing against AI opponents. This project is relevant to media and digital arts by combining classic gameplay elements with modern visuals and sound design.
 
 ## Features
