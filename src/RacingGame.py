@@ -86,8 +86,23 @@ def handle_input():
     if keys[pygame.K_DOWN]:
         player_car.y += 5
 
+#These aren't really in order, I need to figure out what order these go in the code...
 
+#TODO: Add collision detection to make sure car does not go out of bounds
+#TODO: Add collision to race track, this will confine the car to the track only
 def move_player():
+    pass
+
+#TODO: Add basic AI for opposing cars/obstacles in the track
+def enemy_input():
+    pass
+
+#TODO: Simple scoring system: the longer you last, the more points you earn
+def scoring_system():
+    pass
+
+#TODO: Simple menu with play and quit button
+def main_menu():
     pass
 
 if __name__ == "__main__":
