@@ -61,7 +61,7 @@ def main():
 def update():
     handle_input()
     move_player()
-
+    
 def render():
     screen.fill(BLACK) 
     pygame.draw.rect(screen, RED, player_car)
@@ -86,12 +86,21 @@ def handle_input():
     if keys[pygame.K_DOWN]:
         player_car.y += 5
 
-#These aren't really in order, I need to figure out what order these go in the code...
-
-#TODO: Add collision detection to make sure car does not go out of bounds
-#TODO: Add collision to race track, this will confine the car to the track only
 def move_player():
-    pass
+    # Ensure the player stays within the bounds of the screen
+    player_car.x = max(0, min(player_car.x, SCREEN_WIDTH - player_car.width))
+    player_car.y = max(0, min(player_car.y, SCREEN_HEIGHT - player_car.height))
+
+def check_collision():
+    # Check collision with track_rectangles and adjust player's position if necessary
+    for rectangle in track_rectangles:
+        if player_car.colliderect(rectangle):
+            # Simple collision response: stop player movement
+            player_car.x = player_x
+            player_car.y = player_y
+
+
+#These aren't really in order, I need to figure out what order these go in the code...
 
 #TODO: Add basic AI for opposing cars/obstacles in the track
 def enemy_input():
