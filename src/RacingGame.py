@@ -160,7 +160,13 @@ def scoring_system():
 def main_menu():
     pass
 
-#TODO: Game Over screen and Try Again button
+#TODO: Game Over screen 
+def Game_Over():
+    pass
+
+#TODO: Try Again button
+def Try_Again():
+    pass
 
 if __name__ == "__main__":
     main()
