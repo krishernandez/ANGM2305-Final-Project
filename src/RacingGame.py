@@ -61,6 +61,8 @@ def main():
 def update():
     handle_input()
     move_player()
+    check_collision()
+    main_menu()
     
 def render():
     screen.fill(BLACK) 
@@ -87,15 +89,12 @@ def handle_input():
         player_car.y += 5
 
 def move_player():
-    # Ensure the player stays within the bounds of the screen
     player_car.x = max(0, min(player_car.x, SCREEN_WIDTH - player_car.width))
     player_car.y = max(0, min(player_car.y, SCREEN_HEIGHT - player_car.height))
 
 def check_collision():
-    # Check collision with track_rectangles and adjust player's position if necessary
     for rectangle in track_rectangles:
         if player_car.colliderect(rectangle):
-            # Simple collision response: stop player movement
             player_car.x = player_x
             player_car.y = player_y
 
