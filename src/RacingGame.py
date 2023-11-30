@@ -212,16 +212,52 @@ def main_menu():
 
     pygame.display.flip()
 
+import pygame
+import sys
+import random
+
+pygame.init()
+
 def show_game_over_screen():
-    while True:
+    clock = pygame.time.Clock()
+    game_over = True
+
+    while game_over:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                mouse_pos = pygame.mouse.get_pos()
+                if try_again_button.collidepoint(mouse_pos):
+                    reset_game()
 
-        Game_Over()
+        screen.fill(BLACK)
+        game_over_font = pygame.font.Font(None, 64)
+        game_over_text = game_over_font.render("Game Over", True, WHITE)
+        screen.blit(game_over_text, (SCREEN_WIDTH // 2 - game_over_text.get_width() // 2, SCREEN_HEIGHT // 2 - game_over_text.get_height() // 2))
+
+        score_text = score_font.render(f"Your Score: {score}", True, WHITE)
+        screen.blit(score_text, (SCREEN_WIDTH // 2 - score_text.get_width() // 2, SCREEN_HEIGHT // 2 + game_over_text.get_height()))
+
+        # Try Again Button
+        try_again_button = pygame.Rect(200, 600, 200, 50)
+        pygame.draw.rect(screen, GREEN, try_again_button)
+        try_again_text = score_font.render("Try Again", True, BLACK)
+        screen.blit(try_again_text, (try_again_button.x + try_again_button.width // 2 - try_again_text.get_width() // 2, try_again_button.y + try_again_button.height // 2 - try_again_text.get_height() // 2))
 
         pygame.display.flip()
+        clock.tick(60)
+
+def reset_game():
+    global game_active, current_time, score, opponents
+
+    game_active = True
+    current_time = pygame.time.get_ticks()
+    score = 0
+    opponents = []
+    generate_opponents()
 
 if __name__ == "__main__":
     main()
+
