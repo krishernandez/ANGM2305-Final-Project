@@ -45,8 +45,8 @@ track_rectangles = [
 opponents = []
 
 def generate_opponents():
-    x_positions = [100, 200, 300, 400, 500]  # Adjust these as needed
-    for _ in range(5):  # Adjust the number of opponents
+    x_positions = [200, 300, 400]  # Adjust these as needed
+    for _ in range(7):  # Adjust the number of opponents
         x = random.choice(x_positions)
         y = random.randint(-100, -50)  # Start above the screen
         opponent = pygame.Rect(x, y, player_width, player_height)
