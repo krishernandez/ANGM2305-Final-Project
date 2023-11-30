@@ -49,8 +49,8 @@ score_counter = 0
 score_font = pygame.font.Font(None, 36)
 
 def generate_opponents():
-    x_positions = [100, 200, 300, 400, 500]  # Adjust these as needed
-    for _ in range(5):  # Adjust the number of opponents
+    x_positions = [200, 250, 300, 350, 400]  
+    for _ in range(8):  # Adjust the number of opponents
         x = random.choice(x_positions)
         y = random.randint(-300, -50)  
         width = random.randint(20, 50)  
