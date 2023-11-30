@@ -8,14 +8,14 @@ SCREEN_WIDTH = 600
 SCREEN_HEIGHT = 800
 
 BLACK = (0, 0, 0)
-RED = (255, 0, 0) 
+RED = (255, 0, 0)
 GREEN = (0, 255, 0)
 WHITE = (255, 255, 255)
 
 player_width = 30
 player_height = 50
 player_x = (SCREEN_WIDTH - player_width) // 2
-player_y = SCREEN_HEIGHT - player_height - 20  
+player_y = SCREEN_HEIGHT - player_height - 20
 
 player_car = pygame.Rect(player_x, player_y, player_width, player_height)
 
@@ -39,27 +39,27 @@ track_rectangles = [
     pygame.Rect(500, 700, 20, 50),
     pygame.Rect(500, 800, 20, 50),
     pygame.Rect(500, 900, 20, 50),
-    pygame.Rect(500, 1000, 20, 50),  
+    pygame.Rect(500, 1000, 20, 50),
 ]
 
 opponents = []
 score = 0
-score_delay = 10  
+score_delay = 10
 score_counter = 0
 score_font = pygame.font.Font(None, 36)
 
 game_active = False
-opponent_timer = 2000 #Slight delay
+opponent_timer = 2000  # Slight delay
 current_time = pygame.time.get_ticks()
 
 def generate_opponents():
-    x_positions = [200, 250, 300, 350, 400]  
-    for _ in range(6): 
+    x_positions = [200, 250, 300, 350, 400]
+    for _ in range(6):
         x = random.choice(x_positions)
-        y = random.randint(-300, -50)  
-        width = random.randint(20, 50)  
-        height = random.randint(40, 80)  
-        speed = random.randint(3, 8)  
+        y = random.randint(-300, -50)
+        width = random.randint(20, 50)
+        height = random.randint(40, 80)
+        speed = random.randint(3, 8)
 
         opponent = pygame.Rect(x, y, width, height)
         opponents.append({"rect": opponent, "speed": speed})
@@ -86,7 +86,7 @@ def main():
             main_menu()
 
         pygame.display.flip()
-        clock.tick(60) 
+        clock.tick(60)
 
 def update():
     global game_active, current_time
@@ -104,16 +104,13 @@ def Game_Over():
     game_over_text = game_over_font.render("Game Over", True, WHITE)
     screen.blit(game_over_text, (SCREEN_WIDTH // 2 - game_over_text.get_width() // 2, SCREEN_HEIGHT // 2 - game_over_text.get_height() // 2))
 
-    score_text = score_font.render(f"Your Score: {score}", True, WHITE)
-    screen.blit(score_text, (SCREEN_WIDTH // 2 - score_text.get_width() // 2, SCREEN_HEIGHT // 2 + game_over_text.get_height()))
-
     pygame.display.flip()
     pygame.time.wait(2000)  # Wait for 2 seconds before exiting the game
     pygame.quit()
     sys.exit()
 
 def render():
-    screen.fill(BLACK) 
+    screen.fill(BLACK)
     pygame.draw.rect(screen, RED, player_car)
 
     for rectangle in track_rectangles:
@@ -138,7 +135,7 @@ def handle_input():
     if keys[pygame.K_RIGHT]:
         player_car.x += 5
     if keys[pygame.K_UP]:
-        player_car.y -= 5 
+        player_car.y -= 5
     if keys[pygame.K_DOWN]:
         player_car.y += 5
 
@@ -151,7 +148,7 @@ def move_opponents():
         opponent["rect"].y += opponent["speed"]
 
         if opponent["rect"].y > SCREEN_HEIGHT:
-            opponent["rect"].y = random.randint(-300, -50)  
+            opponent["rect"].y = random.randint(-300, -50)
             opponent["rect"].x = random.choice([200, 250, 300, 350, 400])
             opponent["rect"].width = random.randint(20, 50)
             opponent["rect"].height = random.randint(40, 80)
@@ -164,15 +161,17 @@ def check_collision():
         if player_car.colliderect(rectangle):
             player_car.x = player_x
             player_car.y = player_y
-            score = 0  
+            score = 0
             game_active = False  # End the game on collision
+            show_game_over_screen()
 
     for opponent in opponents:
         if player_car.colliderect(opponent["rect"]):
             player_car.x = player_x
             player_car.y = player_y
-            score = 0  
+            score = 0
             game_active = False  # End the game on collision
+            show_game_over_screen()
 
 def scoring_system():
     global score, score_counter
@@ -212,6 +211,17 @@ def main_menu():
                 sys.exit()
 
     pygame.display.flip()
+
+def show_game_over_screen():
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+
+        Game_Over()
+
+        pygame.display.flip()
 
 if __name__ == "__main__":
     main()
