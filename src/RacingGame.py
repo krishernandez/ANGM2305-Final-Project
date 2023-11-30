@@ -43,14 +43,22 @@ track_rectangles = [
 ]
 
 opponents = []
+score = 0
+score_delay = 10  
+score_counter = 0
+score_font = pygame.font.Font(None, 36)
 
 def generate_opponents():
-    x_positions = [200, 300, 400]  # Adjust these as needed
-    for _ in range(7):  # Adjust the number of opponents
+    x_positions = [100, 200, 300, 400, 500]  # Adjust these as needed
+    for _ in range(5):  # Adjust the number of opponents
         x = random.choice(x_positions)
-        y = random.randint(-100, -50)  # Start above the screen
-        opponent = pygame.Rect(x, y, player_width, player_height)
-        opponents.append(opponent)
+        y = random.randint(-300, -50)  
+        width = random.randint(20, 50)  
+        height = random.randint(40, 80)  
+        speed = random.randint(3, 8)  
+
+        opponent = pygame.Rect(x, y, width, height)
+        opponents.append({"rect": opponent, "speed": speed})
 
 generate_opponents()
 
@@ -77,7 +85,8 @@ def update():
     move_player()
     move_opponents()
     check_collision()
-    
+    scoring_system()
+
 def render():
     screen.fill(BLACK) 
     pygame.draw.rect(screen, RED, player_car)
@@ -91,7 +100,10 @@ def render():
         pygame.draw.rect(screen, GREEN, rectangle)
 
     for opponent in opponents:
-        pygame.draw.rect(screen, WHITE, opponent)
+        pygame.draw.rect(screen, WHITE, opponent["rect"])
+
+    score_text = score_font.render(f"Score: {score}", True, WHITE)
+    screen.blit(score_text, (10, 10))
 
 def handle_input():
     keys = pygame.key.get_pressed()
@@ -101,7 +113,7 @@ def handle_input():
     if keys[pygame.K_RIGHT]:
         player_car.x += 5
     if keys[pygame.K_UP]:
-       player_car.y -= 5 
+        player_car.y -= 5 
     if keys[pygame.K_DOWN]:
         player_car.y += 5
 
@@ -111,32 +123,47 @@ def move_player():
 
 def move_opponents():
     for opponent in opponents:
-        opponent.y += 5
+        opponent["rect"].y += opponent["speed"]
 
-        if opponent.y > SCREEN_HEIGHT:
-            opponent.y = random.randint(-100, -50)
+        if opponent["rect"].y > SCREEN_HEIGHT:
+            opponent["rect"].y = random.randint(-300, -50)  
+            opponent["rect"].x = random.choice([200, 250, 300, 350, 400])
+            opponent["rect"].width = random.randint(20, 50)
+            opponent["rect"].height = random.randint(40, 80)
+            opponent["speed"] = random.randint(3, 8)
 
 def check_collision():
+    global score  
+
     for rectangle in track_rectangles:
         if player_car.colliderect(rectangle):
             player_car.x = player_x
             player_car.y = player_y
+            score = 0  
 
     for opponent in opponents:
-        if player_car.colliderect(opponent):
+        if player_car.colliderect(opponent["rect"]):
             player_car.x = player_x
             player_car.y = player_y
+            score = 0  
 
-
-#These aren't really in order, I need to figure out what order these go in the code...
-
-#TODO: Simple scoring system: the longer you last, the more points you earn
 def scoring_system():
-    pass
+    global score, score_counter
+
+    if score_counter % score_delay == 0:
+        score += 1
+    score_counter += 1
+    if score_counter >= score_delay:
+        score_counter = 0
 
 #TODO: Simple menu with play and quit button
 def main_menu():
     pass
 
+#TODO: Game Over screen and Try Again button
+
 if __name__ == "__main__":
     main()
+
+
+
