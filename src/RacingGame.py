@@ -48,9 +48,13 @@ score_delay = 10
 score_counter = 0
 score_font = pygame.font.Font(None, 36)
 
+game_active = False
+opponent_timer = 2000 #Slight delay
+current_time = pygame.time.get_ticks()
+
 def generate_opponents():
     x_positions = [200, 250, 300, 350, 400]  
-    for _ in range(6):  # Adjust the number of opponents
+    for _ in range(6): 
         x = random.choice(x_positions)
         y = random.randint(-300, -50)  
         width = random.randint(20, 50)  
@@ -66,6 +70,7 @@ screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("A Simple Racing Game")
 
 def main():
+    global game_active, current_time
     clock = pygame.time.Clock()
 
     while True:
@@ -74,18 +79,38 @@ def main():
                 pygame.quit()
                 sys.exit()
 
-        update()
-        render()
+        if game_active:
+            update()
+            render()
+        else:
+            main_menu()
 
         pygame.display.flip()
         clock.tick(60) 
 
 def update():
+    global game_active, current_time
     handle_input()
     move_player()
-    move_opponents()
-    check_collision()
-    scoring_system()
+
+    if pygame.time.get_ticks() - current_time >= opponent_timer:
+        move_opponents()
+        check_collision()
+        scoring_system()
+
+def Game_Over():
+    screen.fill(BLACK)
+    game_over_font = pygame.font.Font(None, 64)
+    game_over_text = game_over_font.render("Game Over", True, WHITE)
+    screen.blit(game_over_text, (SCREEN_WIDTH // 2 - game_over_text.get_width() // 2, SCREEN_HEIGHT // 2 - game_over_text.get_height() // 2))
+
+    score_text = score_font.render(f"Your Score: {score}", True, WHITE)
+    screen.blit(score_text, (SCREEN_WIDTH // 2 - score_text.get_width() // 2, SCREEN_HEIGHT // 2 + game_over_text.get_height()))
+
+    pygame.display.flip()
+    pygame.time.wait(2000)  # Wait for 2 seconds before exiting the game
+    pygame.quit()
+    sys.exit()
 
 def render():
     screen.fill(BLACK) 
@@ -133,19 +158,21 @@ def move_opponents():
             opponent["speed"] = random.randint(3, 8)
 
 def check_collision():
-    global score  
+    global score, game_active
 
     for rectangle in track_rectangles:
         if player_car.colliderect(rectangle):
             player_car.x = player_x
             player_car.y = player_y
             score = 0  
+            game_active = False  # End the game on collision
 
     for opponent in opponents:
         if player_car.colliderect(opponent["rect"]):
             player_car.x = player_x
             player_car.y = player_y
             score = 0  
+            game_active = False  # End the game on collision
 
 def scoring_system():
     global score, score_counter
@@ -156,20 +183,35 @@ def scoring_system():
     if score_counter >= score_delay:
         score_counter = 0
 
-#TODO: Simple menu with play and quit button
 def main_menu():
-    pass
+    global game_active, current_time
+    screen.fill(BLACK)
+    play_font = pygame.font.Font(None, 64)
 
-#TODO: Game Over screen 
-def Game_Over():
-    pass
+    play_button = pygame.Rect(200, 400, 200, 50)
+    pygame.draw.rect(screen, GREEN, play_button)
+    play_text = play_font.render("Play", True, BLACK)
+    screen.blit(play_text, (play_button.x + play_button.width // 2 - play_text.get_width() // 2, play_button.y + play_button.height // 2 - play_text.get_height() // 2))
 
-#TODO: Try Again button
-def Try_Again():
-    pass
+    quit_button = pygame.Rect(200, 500, 200, 50)
+    pygame.draw.rect(screen, RED, quit_button)
+    quit_text = play_font.render("Quit", True, BLACK)
+    screen.blit(quit_text, (quit_button.x + quit_button.width // 2 - quit_text.get_width() // 2, quit_button.y + quit_button.height // 2 - quit_text.get_height() // 2))
+
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            sys.exit()
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            mouse_pos = pygame.mouse.get_pos()
+            if play_button.collidepoint(mouse_pos):
+                game_active = True
+                current_time = pygame.time.get_ticks()  # Start the timer
+            elif quit_button.collidepoint(mouse_pos):
+                pygame.quit()
+                sys.exit()
+
+    pygame.display.flip()
 
 if __name__ == "__main__":
     main()
-
-
-
