@@ -240,9 +240,6 @@ def show_game_over_screen():
         game_over_text = game_over_font.render("Game Over", True, WHITE)
         screen.blit(game_over_text, (SCREEN_WIDTH // 2 - game_over_text.get_width() // 2, SCREEN_HEIGHT // 2 - game_over_text.get_height() // 2))
 
-        score_text = score_font.render(f"Your Score: {score}", True, WHITE)
-        screen.blit(score_text, (SCREEN_WIDTH // 2 - score_text.get_width() // 2, SCREEN_HEIGHT // 2 + game_over_text.get_height()))
-
         pygame.draw.rect(screen, GREEN, try_again_button)
         try_again_text = score_font.render("Try Again", True, BLACK)
         screen.blit(try_again_text, (try_again_button.x + try_again_button.width // 2 - try_again_text.get_width() // 2, try_again_button.y + try_again_button.height // 2 - try_again_text.get_height() // 2))
