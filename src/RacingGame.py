@@ -11,6 +11,8 @@ BLACK = (0, 0, 0)
 RED = (255, 0, 0)
 GREEN = (0, 255, 0)
 WHITE = (255, 255, 255)
+YELLOW = (255, 255, 0)
+GRAY = (128, 128, 128)
 
 player_width = 30
 player_height = 50
@@ -110,8 +112,8 @@ def Game_Over():
     sys.exit()
 
 def render():
-    screen.fill(BLACK)
-    pygame.draw.rect(screen, RED, player_car)
+    screen.fill(GRAY)
+    pygame.draw.rect(screen, BLACK, player_car)
 
     for rectangle in track_rectangles:
         rectangle.y -= 5
@@ -119,12 +121,12 @@ def render():
         if rectangle.y + rectangle.height < 0:
             rectangle.y = SCREEN_HEIGHT
 
-        pygame.draw.rect(screen, GREEN, rectangle)
+        pygame.draw.rect(screen, YELLOW, rectangle)
 
     for opponent in opponents:
-        pygame.draw.rect(screen, WHITE, opponent["rect"])
+        pygame.draw.rect(screen, RED, opponent["rect"])
 
-    score_text = score_font.render(f"Score: {score}", True, WHITE)
+    score_text = score_font.render(f"Score: {score}", True, BLACK)
     screen.blit(score_text, (10, 10))
 
 def handle_input():
@@ -241,7 +243,7 @@ def show_game_over_screen():
         screen.blit(game_over_text, (SCREEN_WIDTH // 2 - game_over_text.get_width() // 2, SCREEN_HEIGHT // 2 - game_over_text.get_height() // 2))
 
         pygame.draw.rect(screen, GREEN, try_again_button)
-        try_again_text = score_font.render("Try Again", True, BLACK)
+        try_again_text = score_font.render("Try Again?", True, BLACK)
         screen.blit(try_again_text, (try_again_button.x + try_again_button.width // 2 - try_again_text.get_width() // 2, try_again_button.y + try_again_button.height // 2 - try_again_text.get_height() // 2))
 
         pygame.display.flip()
