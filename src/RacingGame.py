@@ -7,7 +7,6 @@ pygame.init()
 SCREEN_WIDTH = 600
 SCREEN_HEIGHT = 800
 
-#TODO: Color changing for CARS, STRIPES and BACKGROUND
 BLACK = (0, 0, 0) 
 RED = (255, 0, 0)
 GREEN = (0, 255, 0)
@@ -53,7 +52,6 @@ game_active = False
 opponent_timer = 2000  # Slight delay
 current_time = pygame.time.get_ticks()
 
-#TODO: Debug OPPONENTS
 def generate_opponents():
     x_positions = [200, 250, 300, 350, 400]
     for _ in range(6):
@@ -100,7 +98,6 @@ def update():
         check_collision()
         scoring_system()
 
-#TODO: Change color of GAME OVER title
 def Game_Over():
     screen.fill(BLACK)
     game_over_font = pygame.font.Font(None, 64)
@@ -112,7 +109,6 @@ def Game_Over():
     pygame.quit()
     sys.exit()
 
-#TODO: Debug FINAL SCORE on game over title 
 def render():
     screen.fill(BLACK)
     pygame.draw.rect(screen, RED, player_car)
@@ -146,8 +142,6 @@ def handle_input():
 def move_player():
     player_car.x = max(0, min(player_car.x, SCREEN_WIDTH - player_car.width))
     player_car.y = max(0, min(player_car.y, SCREEN_HEIGHT - player_car.height))
-
-#TODO: Debug OPPONENTS
 def move_opponents():
     for opponent in opponents:
         opponent["rect"].y += opponent["speed"]
@@ -178,7 +172,6 @@ def check_collision():
             game_active = False  # End the game on collision
             show_game_over_screen()
 
-#TODO: Debug FINAL SCORE on game over title 
 def scoring_system():
     global score, score_counter
 
@@ -225,10 +218,11 @@ def main_menu():
 
     pygame.display.flip()
 
-#TODO: Debug FINAL SCORE on game over title 
 def show_game_over_screen():
     clock = pygame.time.Clock()
     game_over = True
+
+    try_again_button = pygame.Rect(200, 600, 200, 50)
 
     while game_over:
         for event in pygame.event.get():
@@ -239,6 +233,7 @@ def show_game_over_screen():
                 mouse_pos = pygame.mouse.get_pos()
                 if try_again_button.collidepoint(mouse_pos):
                     reset_game()
+                    return 
 
         screen.fill(BLACK)
         game_over_font = pygame.font.Font(None, 64)
@@ -248,8 +243,6 @@ def show_game_over_screen():
         score_text = score_font.render(f"Your Score: {score}", True, WHITE)
         screen.blit(score_text, (SCREEN_WIDTH // 2 - score_text.get_width() // 2, SCREEN_HEIGHT // 2 + game_over_text.get_height()))
 
-        # Try Again Button
-        try_again_button = pygame.Rect(200, 600, 200, 50)
         pygame.draw.rect(screen, GREEN, try_again_button)
         try_again_text = score_font.render("Try Again", True, BLACK)
         screen.blit(try_again_text, (try_again_button.x + try_again_button.width // 2 - try_again_text.get_width() // 2, try_again_button.y + try_again_button.height // 2 - try_again_text.get_height() // 2))
@@ -257,7 +250,6 @@ def show_game_over_screen():
         pygame.display.flip()
         clock.tick(60)
 
-#TODO: Debug TRY AGAIN on game over title 
 def reset_game():
     global game_active, current_time, score, opponents
 
