@@ -1,6 +1,7 @@
 import pygame
 import sys
 import random
+import pygame.mixer
 
 pygame.init()
 
@@ -73,6 +74,9 @@ pygame.display.set_caption("A Simple Racing Game")
 
 def main():
     global game_active, current_time
+    pygame.mixer.init()  
+    pygame.mixer.music.load('Game.mp3') 
+    pygame.mixer.music.play(-1)  
     clock = pygame.time.Clock()
 
     while True:
